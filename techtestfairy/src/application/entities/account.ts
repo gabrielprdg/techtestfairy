@@ -3,7 +3,7 @@ import { Replace } from "src/helpers/replace"
 export interface UserModel {
   name: string
   email: string
-  hashedPassword: string
+  hashedPassword?: string
   createdAt: Date
 }
 export class User {
@@ -33,11 +33,23 @@ export class User {
     return this.props.name;
   }
 
+  public set email(email: string) {
+    this.props.email = email;
+  }
+
+  public get email(): string {
+    return this.props.email;
+  }
+
   public set password(password: string) {
     this.props.hashedPassword = password;
   }
 
   public get password() {
     return this.props.hashedPassword;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt;
   }
 }
