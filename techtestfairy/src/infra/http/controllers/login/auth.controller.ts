@@ -13,10 +13,10 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: RegisterUserBody) {
-    const { username, email, password } = body;
+    const { name, email, password } = body;
 
     const { user } = await this.registerUser.execute({
-      username,
+      name,
       email,
       password,
     });

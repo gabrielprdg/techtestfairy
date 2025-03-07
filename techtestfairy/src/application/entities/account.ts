@@ -1,21 +1,43 @@
+import { randomUUID } from "node:crypto"
+import { Replace } from "src/helpers/replace"
+export interface UserModel {
+  name: string
+  email: string
+  hashedPassword: string
+  createdAt: Date
+}
 export class User {
-  constructor(
-    public readonly id: string,
-    public readonly name: string,
-    public readonly email: string,
-    public password: string,
-    public readonly createdAt: Date,
-    public readonly updatedAt: Date,
-  ) { }
+  private _id: string;
+  private props: UserModel;
 
-  static create(name: string, email: string, password: string): User {
-    return new User(
-      crypto.randomUUID(), // Gerando ID único
-      name,
-      email,
-      password,
-      new Date(),
-      new Date(),
-    );
+  constructor(
+    props: Replace<UserModel, { createdAt?: Date }>,
+    id?: string,
+  ) {
+    this._id = id ?? randomUUID();
+    this.props = {
+      ...props,
+      createdAt: props.createdAt ?? new Date(),
+    };
+  }
+
+  public get id() {
+    return this._id;
+  }
+
+  public set name(name: string) {
+    this.props.name = name;
+  }
+
+  public get name(): string {
+    return this.props.name;
+  }
+
+  public set password(password: string) {
+    this.props.hashedPassword = password;
+  }
+
+  public get password() {
+    return this.props.hashedPassword;
   }
 }

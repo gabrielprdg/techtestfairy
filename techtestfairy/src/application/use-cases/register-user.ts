@@ -1,10 +1,10 @@
-import { Injectable, ConflictException } from '@nestjs/common';
-import { UserRepository } from '@infra/repositories/user.repository';
-import { User } from '@application/entity/user.entity';
-import { HashService } from '@infra/services/hash.service'; // Serviço de hash para senhas
+import { Injectable, ConflictException } from '@nestjs/common';// Serviço de hash para senhas
+import { UserRepository } from '../protocols/db/login/user-repository';
+import { HashService } from 'src/infra/services/auth.service';
+import { User } from '../entities/account';
 
-interface UserDataRequest {
-  username: string
+interface RegisterUserDataRequest {
+  name: string
   email: string
   password: string
 }
@@ -16,8 +16,8 @@ export class RegisterUser {
     private readonly hashService: HashService,
   ) { }
 
-  async execute(userData: UserDataRequest) {
-    const { username, email, password } = userData
+  async execute(userData: RegisterUserDataRequest) {
+    const { name, email, password } = userData
 
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
@@ -25,9 +25,13 @@ export class RegisterUser {
     }
     const hashedPassword = await this.hashService.hash(password);
 
-    const user = new User(username, email, hashedPassword);
+    const user = new User({
+      name,
+      email,
+      hashedPassword
+    })
 
-    await this.userRepository.save(user);
+    await this.userRepository.create(user);
 
     return { user };
   }
