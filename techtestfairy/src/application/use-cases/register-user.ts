@@ -9,6 +9,10 @@ interface RegisterUserDataRequest {
   password: string
 }
 
+type RegisterUserResponse = {
+  user: User
+}
+
 @Injectable()
 export class RegisterUser {
   constructor(
@@ -16,7 +20,7 @@ export class RegisterUser {
     private readonly hashService: HashService,
   ) { }
 
-  async execute(userData: RegisterUserDataRequest) {
+  async execute(userData: RegisterUserDataRequest): Promise<RegisterUserResponse> {
     const { name, email, password } = userData
 
     const existingUser = await this.userRepository.findByEmail(email);

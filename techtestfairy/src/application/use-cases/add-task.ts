@@ -1,9 +1,7 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from '../protocols/db/login/user-repository';
-import { AuthService } from 'src/infra/services/auth.service';
-import { HashService } from 'src/infra/services/hash.service';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Task } from '../entities/task';
 import { TaskRepository } from '../protocols/db/task/task-repository';
+import { UserRepository } from '../protocols/db/login/user-repository';
 
 interface TaskDataRequest {
   title: string
@@ -13,13 +11,14 @@ interface TaskDataRequest {
 @Injectable()
 export class AddTask {
   constructor(
-    private readonly taskRepository: TaskRepository
+    private readonly taskRepository: TaskRepository,
+    private readonly userRepository: UserRepository
   ) { }
 
   async execute(taskData: TaskDataRequest) {
     const { title, description, userId } = taskData
 
-    const user = await this.taskRepository.findById(userId)
+    const user = await this.userRepository.findById(userId)
     if (!user) {
       throw new ConflictException('User does not exists');
     }

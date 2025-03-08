@@ -10,6 +10,12 @@ export interface TaskModel {
   updatedAt: Date
 }
 
+export interface UpdateTaskModel {
+  title: string
+  description: string
+  status?: string
+}
+
 export class Task {
 
   private _id: string
@@ -63,13 +69,22 @@ export class Task {
     this.props.status = status;
   }
 
-
-
   public get createdAt(): Date {
     return this.props.createdAt;
   }
 
   public get updatedAt(): Date {
     return this.props.updatedAt;
+  }
+
+  public set updateAt(updateAt: Date) {
+    this.props.updatedAt = updateAt;
+  }
+
+  public update(data: UpdateTaskModel) {
+    if (data.title) this.props.title = data.title;
+    if (data.description) this.props.description = data.description;
+    if (data.status) this.props.status = data.status;
+    this.props.updatedAt = new Date(); // Atualiza a data automaticamente
   }
 }
