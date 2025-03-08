@@ -17,7 +17,6 @@ type User = {
 type AuthContextTypes = {
   isAuthenticated: boolean;
   signIn: (data: SignInData) => Promise<void>;
-  signOut: () => void;
   accessToken: string;
 };
 
@@ -28,16 +27,15 @@ type AuthContextProviderProps = {
 const AuthContext = createContext({} as AuthContextTypes);
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string>("");
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!accessToken;
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("usestore-token");
-
+    const token = localStorage.getItem("user-token");
     if (token) {
       setAccessToken(token);
+      navigate('/dashboard')
     }
   }, []);
 
@@ -45,25 +43,20 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     try {
       const res = await api.post("auth/login", { email, password });
 
-      const { accessToken: token } = res.data;
+      const { token } = res.data;
       setAccessToken(token);
 
       localStorage.setItem("user-token", token);
 
-      navigate("/Dashboard");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed", error);
+      throw error
     }
   }
 
-  function signOut() {
-    localStorage.removeItem("user-token");
-    setAccessToken("");
-    navigate("/");
-  }
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, signIn, signOut, accessToken }}>
+    <AuthContext.Provider value={{ isAuthenticated, signIn, accessToken }}>
       {children}
     </AuthContext.Provider>
   );
