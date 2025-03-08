@@ -3,7 +3,7 @@ import { Task } from '../entities/task';
 import { TaskRepository } from '../protocols/db/task/task-repository';
 
 type FindByStatusResponse = {
-  task: Task
+  tasks: Task[]
 }
 @Injectable()
 export class FindByStatus {
@@ -12,11 +12,11 @@ export class FindByStatus {
   ) { }
 
   async execute(status: string): Promise<FindByStatusResponse> {
-    const task = await this.taskRepository.findByStatus(status);
+    const tasks = await this.taskRepository.findByStatus(status);
 
-    if (!task) {
+    if (!tasks) {
       throw new ConflictException('task with this status does not exists');
     }
-    return { task }
+    return { tasks }
   }
 }

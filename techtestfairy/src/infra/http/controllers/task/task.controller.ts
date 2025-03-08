@@ -6,6 +6,7 @@ import { FindByStatus } from 'src/application/use-cases/find-by-status';
 import { LoadTasks } from 'src/application/use-cases/load-taks';
 import { DeleteTask } from 'src/application/use-cases/delete-taks';
 import { UpdateTask } from 'src/application/use-cases/update-task';
+import { TaskViewModel } from '../../view-model/task-view-model';
 
 @Controller('task')
 export class TaskController {
@@ -30,25 +31,16 @@ export class TaskController {
   }
 
   @Get('tasks/:status')
-  async findTaskByStatus(@Body() body: AddTaskBody) {
-    const { title, description, userId } = body;
+  async findTasksByStatus(@Param('status') status: string) {
+    const { tasks } = await this.findByStatus.execute(status)
 
-    await this.addTask.execute({
-      title,
-      description,
-      userId
-    });
+    return { tasks: tasks.map(TaskViewModel.toHTTP) };
   }
 
   @Get('tasks')
-  async loadAll(@Body() body: AddTaskBody) {
-    const { title, description, userId } = body;
-
-    await this.addTask.execute({
-      title,
-      description,
-      userId
-    });
+  async loadAll() {
+    const { tasks } = await this.loadTask.execute()
+    return { tasks: tasks.map(TaskViewModel.toHTTP) };
   }
 
   @Delete(':id/delete')

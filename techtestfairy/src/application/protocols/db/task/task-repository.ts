@@ -6,5 +6,5 @@ export abstract class TaskRepository {
   abstract loadTasks(): Promise<Task[]>;
   abstract deleteById(id: string): Promise<void>;
   abstract findById(id: string): Promise<Task | null>;
-  abstract findByStatus(status: string): Promise<Task | null>;
+  abstract findByStatus(status: string): Promise<Task[] | null>;
 }
