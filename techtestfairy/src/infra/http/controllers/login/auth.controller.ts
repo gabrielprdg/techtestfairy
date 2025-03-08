@@ -3,6 +3,7 @@ import { LoginUser } from 'src/application/use-cases/login-user';
 import { RegisterUser } from 'src/application/use-cases/register-user';
 import { RegisterUserBody } from '../../dtos/register-user-body';
 import { LoginUserBody } from '../../dtos/login-user-body';
+import { UserViewModel } from '../../view-model/user-view-model';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +22,7 @@ export class AuthController {
       password,
     });
 
-    return { user };
+    return UserViewModel.toHTTP(user);
   }
 
   @Post('login')

@@ -3,7 +3,7 @@ import { Replace } from "src/helpers/replace"
 export interface UserModel {
   name: string
   email: string
-  hashedPassword?: string
+  hashedPassword: string
   createdAt: Date
 }
 export class User {

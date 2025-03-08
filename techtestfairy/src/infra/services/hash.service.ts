@@ -1,27 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
-import { User } from 'src/application/entities/account';
-
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class AuthService {
-  private readonly jwtSecret = 'your_jwt_secret';
-  private readonly jwtExpiresIn = '1h';
+export class HashService {
+  private readonly saltRounds = 10;
 
-  generateToken(user: User): string {
-    const payload = {
-      sub: user.id,
-      email: user.email,
-    };
-
-    return jwt.sign(payload, this.jwtSecret, { expiresIn: this.jwtExpiresIn });
+  async hash(password: string): Promise<string> {
+    return bcrypt.hash(password, this.saltRounds);
   }
 
-  validateToken(token: string): any {
-    try {
-      return jwt.verify(token, this.jwtSecret);
-    } catch (e) {
-      throw new Error('Invalid or expired token');
-    }
+  async compare(password: string, hashedPassword: string): Promise<boolean> {
+    return bcrypt.compare(password, hashedPassword);
   }
 }

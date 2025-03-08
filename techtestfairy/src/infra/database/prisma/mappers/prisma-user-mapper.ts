@@ -17,6 +17,7 @@ export class PrismaUserMapper {
       {
         name: raw.name,
         email: raw.email,
+        hashedPassword: raw.password,
         createdAt: raw.createdAt
       },
       raw.id

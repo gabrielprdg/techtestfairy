@@ -1,7 +1,7 @@
 import { Injectable, ConflictException } from '@nestjs/common';// Serviço de hash para senhas
 import { UserRepository } from '../protocols/db/login/user-repository';
-import { HashService } from 'src/infra/services/auth.service';
 import { User } from '../entities/account';
+import { HashService } from 'src/infra/services/hash.service';
 
 interface RegisterUserDataRequest {
   name: string
