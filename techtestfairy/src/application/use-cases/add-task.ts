@@ -1,31 +1,35 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from '../protocols/db/login/user-repository';
 import { AuthService } from 'src/infra/services/auth.service';
 import { HashService } from 'src/infra/services/hash.service';
+import { Task } from '../entities/task';
+import { TaskRepository } from '../protocols/db/task/task-repository';
 
+interface TaskDataRequest {
+  title: string
+  description: string
+  userId: string
+}
 @Injectable()
 export class AddTask {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly authService: AuthService, // Serviço para gerar o JWT
-    private readonly hashService: HashService, // Serviço para comparar as senhas
+    private readonly taskRepository: TaskRepository
   ) { }
 
-  async execute(email: string, password: string) {
-    const user = await this.userRepository.findByEmail(email);
+  async execute(taskData: TaskDataRequest) {
+    const { title, description, userId } = taskData
 
+    const user = await this.taskRepository.findById(userId)
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new ConflictException('User does not exists');
     }
 
-    const isPasswordValid = await this.hashService.compare(password, user.password);
+    const task = new Task({
+      title,
+      description,
+      userId
+    })
 
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const token = this.authService.generateToken(user);
-
-    return { token };
+    await this.taskRepository.create(task);
   }
 }
