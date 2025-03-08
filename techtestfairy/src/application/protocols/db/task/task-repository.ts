@@ -1,9 +1,9 @@
-import { User } from "src/application/entities/account";
+import { Task } from "src/application/entities/task";
 
 export abstract class TaskRepository {
-  abstract create(user: User): Promise<void>;
-  abstract updateById(user: User): Promise<void>;
-  abstract loadTasks(user: User): Promise<void>;
-  abstract deleteById(user: User): Promise<void>;
-  abstract findByStatus(email: string): Promise<User | null>;
+  abstract create(task: Task): Promise<void>;
+  abstract updateById(task: Task): Promise<void>;
+  abstract loadTasks(task: Task): Promise<void>;
+  abstract deleteById(task: Task): Promise<void>;
+  abstract findByStatus(status: string): Promise<Task | null>;
 }
