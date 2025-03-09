@@ -87,10 +87,10 @@ export default function TaskTable() {
                   </td>
                   <td>{formatDate(task.createdAt)}</td>
                   <td className="py-3 px-4 flex gap-2">
-                    <button onClick={() => handleEdit(task.id)} className="px-3 py-1 text-white bg-blue-500 hover:bg-blue-600 rounded-lg text-sm">
+                    <button onClick={() => handleEdit(task.id)} className="cursor-pointer px-3 py-1 text-white bg-blue-500 hover:bg-blue-600 rounded-lg text-sm">
                       Editar
                     </button>
-                    <button className="px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-lg text-sm">
+                    <button className="cursor-pointer px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-lg text-sm">
                       Excluir
                     </button>
                   </td>

@@ -8,6 +8,7 @@ import { DeleteTask } from 'src/application/use-cases/delete-taks';
 import { UpdateTask } from 'src/application/use-cases/update-task';
 import { TaskViewModel } from '../../view-model/task-view-model';
 import { LoadUsers } from 'src/application/use-cases/load-users';
+import { FindById } from 'src/application/use-cases/find-by-id';
 
 @Controller('task')
 export class TaskController {
@@ -17,7 +18,9 @@ export class TaskController {
     private readonly loadTask: LoadTasks,
     private readonly deleteTask: DeleteTask,
     private readonly updateTask: UpdateTask,
-    private readonly loadUsers: LoadUsers
+    private readonly loadUsers: LoadUsers,
+    private readonly findById: FindById
+
   ) { }
 
   @Post()
@@ -31,6 +34,14 @@ export class TaskController {
       userId
     });
   }
+
+  @Get('from/:id')
+  async findTasksById(@Param('id') id: string) {
+    const { task } = await this.findById.execute(id)
+
+    return TaskViewModel.toHTTP(task);
+  }
+
 
   @Get(':status')
   async findTasksByStatus(@Param('status') status: string) {

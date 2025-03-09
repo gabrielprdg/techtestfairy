@@ -12,6 +12,7 @@ import { LoadTasks } from 'src/application/use-cases/load-taks';
 import { DeleteTask } from 'src/application/use-cases/delete-taks';
 import { UpdateTask } from 'src/application/use-cases/update-task';
 import { LoadUsers } from 'src/application/use-cases/load-users';
+import { FindById } from 'src/application/use-cases/find-by-id';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { LoadUsers } from 'src/application/use-cases/load-users';
   providers: [
     AddTask,
     FindByStatus,
+    FindById,
     LoadTasks,
     LoadUsers,
     DeleteTask,

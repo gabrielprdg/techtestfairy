@@ -3,10 +3,10 @@ import Select from "../../components/Select";
 import Table from "../../components/Table";
 
 export default function Dashboard() {
-  const navigate = useNavigate();  // Hook para navegação
+  const navigate = useNavigate();
 
   const handleCreateTask = () => {
-    navigate('/createTask');  // Redireciona para a página de criação de tarefas
+    navigate('/createTask');
   };
 
   return (
@@ -19,7 +19,7 @@ export default function Dashboard() {
           <Select />
           <button
             onClick={handleCreateTask}
-            className="ml-12 mr-12 mt-6 px-4 py-2 bg-blue-500 text-white rounded-md h-10">
+            className="cursor-pointer ml-12 mr-12 mt-6 px-4 py-2 bg-blue-500 text-white rounded-md h-10">
             +
           </button>
         </div>
