@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { LoginUser } from 'src/application/use-cases/login-user';
 import { RegisterUser } from 'src/application/use-cases/register-user';
-import { RegisterUserBody } from '../../dtos/register-user-body';
 import { LoginUserBody } from '../../dtos/login-user-body';
+import { RegisterUserBody } from '../../dtos/register-user-body';
 import { UserViewModel } from '../../view-model/user-view-model';
-import { TaskViewModel } from '../../view-model/task-view-model';
-import { LoadUsers } from 'src/application/use-cases/load-users';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -15,6 +14,8 @@ export class AuthController {
   ) { }
 
   @Post('register')
+  @ApiOperation({ summary: 'Registrar usuário' })
+  @ApiResponse({ status: 200, description: 'Usuário registrado' })
   async register(@Body() body: RegisterUserBody) {
     const { name, email, password } = body;
 
@@ -28,6 +29,8 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'Autenticar na api' })
+  @ApiResponse({ status: 200, description: 'Usuário autenticado' })
   async login(@Body() body: LoginUserBody) {
     const { email, password } = body;
 

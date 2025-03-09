@@ -9,7 +9,10 @@ import { UpdateTask } from 'src/application/use-cases/update-task';
 import { TaskViewModel } from '../../view-model/task-view-model';
 import { LoadUsers } from 'src/application/use-cases/load-users';
 import { FindById } from 'src/application/use-cases/find-by-id';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tasks')
+@ApiBearerAuth()
 @Controller('task')
 export class TaskController {
   constructor(
@@ -25,6 +28,8 @@ export class TaskController {
 
   @Post()
   @HttpCode(204)
+  @ApiOperation({ summary: 'Criar tarefas' })
+  @ApiResponse({ status: 204, description: 'Criação de tarefas.' })
   async create(@Body() body: AddTaskBody) {
     const { title, description, userId } = body;
 
@@ -36,6 +41,8 @@ export class TaskController {
   }
 
   @Get('from/:id')
+  @ApiOperation({ summary: 'Listar tarefa pelo id' })
+  @ApiResponse({ status: 200, description: 'Lista de tarefa pelo id.' })
   async findTasksById(@Param('id') id: string) {
     const { task } = await this.findById.execute(id)
 
@@ -44,6 +51,8 @@ export class TaskController {
 
 
   @Get(':status')
+  @ApiOperation({ summary: 'Listar tarefas pelo status' })
+  @ApiResponse({ status: 200, description: 'Lista de tarefas pelo status.' })
   async findTasksByStatus(@Param('status') status: string) {
     const { tasks } = await this.findByStatus.execute(status)
 
@@ -51,17 +60,23 @@ export class TaskController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Listar todas as tarefas' })
+  @ApiResponse({ status: 200, description: 'Lista de todas as tarefas' })
   async loadAll() {
     const { tasks } = await this.loadTask.execute()
     return tasks.map(TaskViewModel.toHTTP);
   }
 
   @Delete(':id/delete')
+  @ApiOperation({ summary: 'Deletar tarefas pelo id' })
+  @ApiResponse({ status: 200, description: 'Deleta tarefa pelo id.' })
   async delete(@Param('id') id: string) {
     await this.deleteTask.execute(id);
   }
 
   @Patch(':id/update')
+  @ApiOperation({ summary: 'Atualizar tarefas pelo id' })
+  @ApiResponse({ status: 200, description: 'Atualiza tarefa pelo status.' })
   async update(@Param('id') id: string, @Body() body: UpdateTaskBody) {
     const { title, description, status } = body;
 
@@ -75,6 +90,8 @@ export class TaskController {
     return TaskViewModel.toHTTP(task);
   }
 
+  @ApiOperation({ summary: 'Listar todos os usuários com seus ids' })
+  @ApiResponse({ status: 200, description: 'Listagem de usuários' })
   @Get('users/list')
   async findUsers() {
     const { users } = await this.loadUsers.execute()
