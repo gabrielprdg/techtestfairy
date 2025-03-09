@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { api } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 
+type TableProps = {
+  tasks: Task[]
+  onDeleteTask: (taskId: string) => void
+};
+
 interface Task {
   id: string;
   title: string;
@@ -19,34 +24,44 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default function TaskTable() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function TaskTable({ tasks, onDeleteTask }: TableProps) {
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Estado para controle do modal
+  const [taskIdToDelete, setTaskIdToDelete] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const token = localStorage.getItem("user-token"); // Pega o token
-        const response = await api.get("task", {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        setTasks(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar tarefas:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, []);
-
   const handleEdit = (id: string) => {
-    navigate(`/updateTask/${id}`);  // Redireciona para a página de edição
+    navigate(`/updateTask/${id}`);
   };
+
+  const handleDelete = async () => {
+    if (!taskIdToDelete) return;
+
+    try {
+      const token = localStorage.getItem("user-token");
+      await api.delete(`/task/${taskIdToDelete}/delete`, {
+        headers: { authorization: `Bearer ${token}` },
+      });
+
+      onDeleteTask(taskIdToDelete);
+      setShowModal(false);
+      setTaskIdToDelete(null);
+    } catch (error) {
+      console.error("Erro ao excluir a tarefa:", error);
+    }
+  };
+
+  const openModal = (taskId: string) => {
+    setTaskIdToDelete(taskId); // Armazena a ID da tarefa a ser excluída
+    setShowModal(true); // Abre o modal
+  };
+
+  const closeModal = () => {
+    setShowModal(false); // Fecha o modal
+    setTaskIdToDelete(null); // Limpa a ID
+  };
+
 
   return (
     <div className=" mx-auto p-4">
@@ -69,7 +84,7 @@ export default function TaskTable() {
             {loading ? (
               <tr>
                 <td colSpan={5} className="text-center py-4">
-                  Carregando...
+                  Sem resultados.
                 </td>
               </tr>
             ) : tasks.length > 0 ? (
@@ -81,7 +96,13 @@ export default function TaskTable() {
                     {task.description}
                   </td>
                   <td className="py-3 px-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${task.status === "pending" ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"}`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold 
+    ${task.status === "pending" ? "bg-yellow-100 text-yellow-700" :
+                          task.status === "completed" ? "bg-green-100 text-green-700" :
+                            task.status === "in_progress" ? "bg-blue-100 text-blue-700" :
+                              task.status === "canceled" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-700"}`}
+                    >
                       {task.status}
                     </span>
                   </td>
@@ -90,7 +111,7 @@ export default function TaskTable() {
                     <button onClick={() => handleEdit(task.id)} className="cursor-pointer px-3 py-1 text-white bg-blue-500 hover:bg-blue-600 rounded-lg text-sm">
                       Editar
                     </button>
-                    <button className="cursor-pointer px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-lg text-sm">
+                    <button onClick={() => openModal(task.id)} className="cursor-pointer px-3 py-1 text-white bg-red-500 hover:bg-red-600 rounded-lg text-sm">
                       Excluir
                     </button>
                   </td>
@@ -106,6 +127,29 @@ export default function TaskTable() {
           </tbody>
         </table>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+            <h2 className="text-xl font-semibold text-gray-800">Confirmar Exclusão</h2>
+            <p className="mt-4 text-gray-600">Tem certeza que deseja excluir esta tarefa?</p>
+            <div className="mt-6 flex justify-end gap-4">
+              <button
+                onClick={closeModal}
+                className="cursor-pointer px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleDelete}
+                className="cursor-pointer px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
