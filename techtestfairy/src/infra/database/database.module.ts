@@ -4,6 +4,7 @@ import { PrismaUserRepository } from "./prisma/repositories/prisma-user-reposito
 import { Module } from "@nestjs/common";
 import { TaskRepository } from "src/application/protocols/db/task/task-repository";
 import { PrismaTaskRepository } from "./prisma/repositories/prisma-task-repository";
+import { LoadUsers } from "src/application/use-cases/load-users";
 
 
 @Module({
@@ -16,7 +17,7 @@ import { PrismaTaskRepository } from "./prisma/repositories/prisma-task-reposito
     {
       provide: TaskRepository,
       useClass: PrismaTaskRepository,
-    },
+    }
   ],
   exports: [UserRepository, TaskRepository],
 })

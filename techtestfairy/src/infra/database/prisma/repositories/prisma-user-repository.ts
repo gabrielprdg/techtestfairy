@@ -43,4 +43,10 @@ export class PrismaUserRepository implements UserRepository {
 
     return PrismaUserMapper.toDomain(task);
   }
+
+  async findUsers(): Promise<User[]> {
+    const tasks = await this.prismaService.user.findMany();
+
+    return PrismaUserMapper.toArrayDomain(tasks);
+  }
 }

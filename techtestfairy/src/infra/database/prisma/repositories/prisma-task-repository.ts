@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { Task } from "src/application/entities/task";
 import { TaskRepository } from "src/application/protocols/db/task/task-repository";
 import { PrismaService } from "../../prisma.service";
 import { PrismaTaskMapper } from "../mappers/prisma-task-mapper";
-import { Task } from "src/application/entities/task";
 
 @Injectable()
 export class PrismaTaskRepository implements TaskRepository {
@@ -64,4 +64,5 @@ export class PrismaTaskRepository implements TaskRepository {
 
     return PrismaTaskMapper.toArrayDomain(tasks);
   }
+
 }

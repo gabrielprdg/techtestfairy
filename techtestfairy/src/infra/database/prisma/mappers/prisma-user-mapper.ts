@@ -23,4 +23,21 @@ export class PrismaUserMapper {
       raw.id
     )
   }
+
+  static toArrayDomain(raw: RawUser[]): User[] {
+    const users = raw.map(
+      (user) =>
+        new User(
+          {
+            name: user.name,
+            email: user.email,
+            hashedPassword: user.password,
+            createdAt: user.createdAt
+          },
+          user.id,
+        ),
+    );
+
+    return users;
+  }
 }

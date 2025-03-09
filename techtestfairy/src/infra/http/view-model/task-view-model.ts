@@ -1,3 +1,4 @@
+import { User } from 'src/application/entities/account';
 import { Task } from 'src/application/entities/task';
 
 export class TaskViewModel {
@@ -9,6 +10,13 @@ export class TaskViewModel {
       status: task.status,
       userId: task.userId,
       createdAt: task.createdAt
+    };
+  }
+
+  static userToHTTP(user: User) {
+    return {
+      id: user.id,
+      name: user.name
     };
   }
 }

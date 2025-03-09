@@ -7,6 +7,7 @@ import { LoadTasks } from 'src/application/use-cases/load-taks';
 import { DeleteTask } from 'src/application/use-cases/delete-taks';
 import { UpdateTask } from 'src/application/use-cases/update-task';
 import { TaskViewModel } from '../../view-model/task-view-model';
+import { LoadUsers } from 'src/application/use-cases/load-users';
 
 @Controller('task')
 export class TaskController {
@@ -16,6 +17,7 @@ export class TaskController {
     private readonly loadTask: LoadTasks,
     private readonly deleteTask: DeleteTask,
     private readonly updateTask: UpdateTask,
+    private readonly loadUsers: LoadUsers
   ) { }
 
   @Post()
@@ -60,5 +62,11 @@ export class TaskController {
     });
 
     return TaskViewModel.toHTTP(task);
+  }
+
+  @Get('users/list')
+  async findUsers() {
+    const { users } = await this.loadUsers.execute()
+    return users.map(TaskViewModel.userToHTTP);
   }
 }

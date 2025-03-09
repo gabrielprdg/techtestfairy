@@ -1,3 +1,4 @@
+import { User } from "src/application/entities/account";
 import { Task } from "src/application/entities/task";
 
 export abstract class TaskRepository {
