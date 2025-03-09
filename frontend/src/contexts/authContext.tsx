@@ -33,11 +33,24 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   useEffect(() => {
     const token = localStorage.getItem("user-token");
-    if (token) {
+    if (token && !isTokenExpired(token)) {
       setAccessToken(token);
       navigate('/dashboard')
+    } else {
+      setAccessToken("")
     }
   }, []);
+
+  const isTokenExpired = (token: string) => {
+    try {
+      const decodedToken: any = JSON.parse(atob(token.split('.')[1])); // Decodifica o token JWT
+      const expirationTime = decodedToken.exp * 1000; // Expiração do token em milissegundos
+      const currentTime = Date.now();
+      return currentTime > expirationTime;
+    } catch (error) {
+      return true; // Se não for possível decodificar, considera como expirado
+    }
+  };
 
   async function signIn({ email, password }: SignInData) {
     try {

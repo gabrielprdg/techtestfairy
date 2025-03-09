@@ -12,15 +12,13 @@ export default function SignUp() {
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Pegando os dados dos inputs
     const name = (event.target as any).name.value;
     const email = (event.target as any).email.value;
     const password = (event.target as any).pass.value;
     const confirmPassword = (event.target as any).cfpass.value;
 
-    // Validação simples de senha
     if (password !== confirmPassword) {
-      toast.error('As senhas não coincidem');
+      toast.error('As senhas não se coincidem');
       return;
     }
 

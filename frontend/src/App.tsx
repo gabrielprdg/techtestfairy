@@ -6,6 +6,8 @@ import SignUp from './pages/Signup';
 import { PrivateRoute } from './routes/PrivateRoutes';
 import Dashboard from './pages/Dashboard';
 import { ToastContainer } from 'react-toastify';
+import UpdateTask from './pages/UpdateTask';
+import CreateTask from './pages/CreateTask';
 
 
 function App() {
@@ -19,6 +21,23 @@ function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/updateTask/:id"
+          element={
+            <PrivateRoute>
+              <UpdateTask />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/createTask"
+          element={
+            <PrivateRoute>
+              <CreateTask />
             </PrivateRoute>
           }
         />

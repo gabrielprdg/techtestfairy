@@ -5,7 +5,7 @@ import { User } from 'src/application/entities/account';
 @Injectable()
 export class AuthService {
   private readonly jwtSecret = 'your_jwt_secret';
-  private readonly jwtExpiresIn = '1h';
+  private readonly jwtExpiresIn = '24h';
 
   generateToken(user: User): string {
     const payload = {
