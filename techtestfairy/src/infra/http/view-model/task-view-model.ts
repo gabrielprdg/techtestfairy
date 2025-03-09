@@ -7,7 +7,8 @@ export class TaskViewModel {
       title: task.title,
       description: task.description,
       status: task.status,
-      userId: task.userId
+      userId: task.userId,
+      createdAt: task.createdAt
     };
   }
 }

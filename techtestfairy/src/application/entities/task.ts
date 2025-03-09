@@ -22,14 +22,14 @@ export class Task {
   private props: TaskModel
 
   constructor(
-    props: Replace<TaskModel, { createdAt?: Date, updatedAt?: Date }>,
+    props: Replace<TaskModel, { status?: string, createdAt?: Date, updatedAt?: Date }>,
     id?: string
   ) {
     this._id = id ?? randomUUID();
 
     this.props = {
       ...props,
-      status: 'pending',
+      status: props.status ?? 'pending',
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
     };
@@ -67,6 +67,10 @@ export class Task {
 
   public set status(status: string) {
     this.props.status = status;
+  }
+
+  public get status() {
+    return this.props.status ?? 'pending';
   }
 
   public get createdAt(): Date {

@@ -30,17 +30,17 @@ export class TaskController {
     });
   }
 
-  @Get('tasks/:status')
+  @Get(':status')
   async findTasksByStatus(@Param('status') status: string) {
     const { tasks } = await this.findByStatus.execute(status)
 
-    return { tasks: tasks.map(TaskViewModel.toHTTP) };
+    return tasks.map(TaskViewModel.toHTTP);
   }
 
-  @Get('tasks')
+  @Get()
   async loadAll() {
     const { tasks } = await this.loadTask.execute()
-    return { tasks: tasks.map(TaskViewModel.toHTTP) };
+    return tasks.map(TaskViewModel.toHTTP);
   }
 
   @Delete(':id/delete')
@@ -52,13 +52,13 @@ export class TaskController {
   async update(@Param('id') id: string, @Body() body: UpdateTaskBody) {
     const { title, description, status } = body;
 
-    const task = await this.updateTask.execute({
+    const { task } = await this.updateTask.execute({
       id,
       title,
       description,
       status
     });
 
-    return { task };
+    return TaskViewModel.toHTTP(task);
   }
 }

@@ -7,9 +7,10 @@ export class PrismaTaskMapper {
       id: task.id,
       title: task.title,
       description: task.description,
-      status: task.status,
       userId: task.userId,
-      createdAt: task.createdAt
+      status: task.status,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
     }
   }
 
@@ -35,7 +36,7 @@ export class PrismaTaskMapper {
             description: task.description,
             userId: task.userId,
             status: task.status,
-            createdAt: task.createdAt,
+            createdAt: task.createdAt
           },
           task.id,
         ),

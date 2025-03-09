@@ -30,11 +30,13 @@ export class PrismaTaskRepository implements TaskRepository {
     return PrismaTaskMapper.toDomain(task);
   }
 
-  async updateById(id: string, task: Partial<Task>): Promise<Task> {
+  async updateById(id: string, task: Task): Promise<Task> {
+    const raw = PrismaTaskMapper.toPrisma(task);
+
     const taskUpdated = await this.prismaService.task.update({
-      where: { id },
+      where: { id: raw.id },
       data: {
-        ...task,
+        ...raw,
         updatedAt: new Date(),
       },
     });
