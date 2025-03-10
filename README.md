@@ -47,6 +47,11 @@ npm i
 npm run start
 yarn start
 ```
+
+### Swaager:
+
+Documentação disponível em http://localhost:{PORTA}/api
+
 ### Frontend
 Para startar a aplicação frontend é so rodar o comando
 ```
