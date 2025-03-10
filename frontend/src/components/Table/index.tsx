@@ -64,8 +64,8 @@ export default function TaskTable({ tasks, onDeleteTask }: TableProps) {
 
 
   return (
-    <div className=" mx-auto p-4">
-      <div className="overflow-x-auto rounded-lg shadow-md">
+    <div className="mx-auto p-4">
+      <div className="sm:justify-center overflow-x-auto rounded-lg shadow-md">
         <table className="w-full border-collapse bg-white">
           {/* Cabeçalho */}
           <thead className="bg-gray-800 text-white">
@@ -74,16 +74,15 @@ export default function TaskTable({ tasks, onDeleteTask }: TableProps) {
               <th className="py-3 px-4 text-left">Título</th>
               <th className="py-3 px-4 text-left">Descrição</th>
               <th className="py-3 px-4 text-left">Status</th>
-              <th className="py-3 px-4 text-left">Date</th>
+              <th className="py-3 px-4 text-left">Data</th>
               <th className="py-3 px-4 text-left">Ações</th>
             </tr>
           </thead>
 
-          {/* Corpo */}
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={5} className="text-center py-4">
+                <td colSpan={6} className="text-center py-4">
                   Sem resultados.
                 </td>
               </tr>
@@ -92,13 +91,11 @@ export default function TaskTable({ tasks, onDeleteTask }: TableProps) {
                 <tr key={task.id} className="border-b hover:bg-gray-100 transition">
                   <td className="py-3 px-4">{index + 1}</td>
                   <td className="py-3 px-4">{task.title}</td>
-                  <td className="py-3 px-4 truncate max-w-[150px]">
-                    {task.description}
-                  </td>
+                  <td className="py-3 px-4 truncate max-w-[150px]">{task.description}</td>
                   <td className="py-3 px-4">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold 
-    ${task.status === "pending" ? "bg-yellow-100 text-yellow-700" :
+                      ${task.status === "pending" ? "bg-yellow-100 text-yellow-700" :
                           task.status === "completed" ? "bg-green-100 text-green-700" :
                             task.status === "in_progress" ? "bg-blue-100 text-blue-700" :
                               task.status === "canceled" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-700"}`}
@@ -119,7 +116,7 @@ export default function TaskTable({ tasks, onDeleteTask }: TableProps) {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center py-4">
+                <td colSpan={6} className="text-center py-4">
                   Nenhuma tarefa encontrada.
                 </td>
               </tr>
@@ -152,4 +149,5 @@ export default function TaskTable({ tasks, onDeleteTask }: TableProps) {
       )}
     </div>
   );
+
 }

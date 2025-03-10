@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../services/api';
-import styles from './styles.module.scss';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/authContext';
 
@@ -23,15 +21,16 @@ export default function SignUp() {
     }
 
     try {
-      await api.post('/auth/register', {
+      const res = await api.post('/auth/register', {
         name,
         email,
         password,
       });
 
-      await signIn({ email, password });
+      if (res.status == 201) {
+        toast.success("Cadastro realizado com sucesso")
+      }
 
-      navigate('/Dashboard');
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
         toast.error("Este email já está cadastrado.");
@@ -42,52 +41,92 @@ export default function SignUp() {
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <div className={styles.title}>
-        <h1>TechTest</h1>
-        <h1 className={styles.fairy}>Fairy</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="text-center mb-6">
+        <h1 className="text-4xl font-bold text-gray-800">TechTest</h1>
+        <h1 className="text-4xl font-bold text-green-400">Fairy</h1>
       </div>
-      <form onSubmit={handleSignUp} className={styles.form}>
-        <label htmlFor="name">Nome</label>
-        <input
-          id="name"
-          type="text"
-          autoComplete="name"
-          required
-          className={styles.inputName}
-        />
+      <form
+        onSubmit={handleSignUp}
+        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
+      >
+        <div className="mb-4">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Nome
+          </label>
+          <input
+            id="name"
+            type="text"
+            autoComplete="name"
+            required
+            className="mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+        </div>
 
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          className={styles.inputEmail}
-        />
+        <div className="mb-4">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            className="mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+        </div>
 
-        <label htmlFor="pass">Senha</label>
-        <input
-          id="pass"
-          type="password"
-          autoComplete="password"
-          required
-          className={styles.inputPass}
-        />
+        <div className="mb-4">
+          <label
+            htmlFor="pass"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Senha
+          </label>
+          <input
+            id="pass"
+            type="password"
+            autoComplete="password"
+            required
+            className="mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+        </div>
 
-        <label htmlFor="cfpass">Confirmar senha</label>
-        <input
-          id="cfpass"
-          type="password"
-          autoComplete="password"
-          required
-          className={styles.inputCfPass}
-        />
+        <div className="mb-6">
+          <label
+            htmlFor="cfpass"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Confirmar senha
+          </label>
+          <input
+            id="cfpass"
+            type="password"
+            autoComplete="password"
+            required
+            className="mt-2 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+        </div>
 
-        <button type="submit">
+        <button
+          type="submit"
+          className="w-full bg-green-400 text-white p-2 rounded-md hover:bg-green-500 transition duration-200"
+        >
           Cadastrar
         </button>
       </form>
+      <div className="mt-4 text-center">
+        Já possui uma conta?{" "}
+        <span className="text-green-400">
+          <Link to="/">Faça login</Link>
+        </span>
+      </div>
     </div>
   );
 }

@@ -41,7 +41,7 @@ export default function Dashboard() {
     <div className="p-8 pr-12">
       <h1 className="m-12 text-4xl font-semibold text-gray-800">Dashboard</h1>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-anchor-center">
         <h2 className="m-12 text-2xl font-medium text-gray-600 mt-4">Tarefas</h2>
         <div className="flex">
           <Select taskStatus={status} onChange={setStatus} />
