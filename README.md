@@ -53,8 +53,15 @@ yarn start
 Documentação disponível em http://localhost:{PORTA}/api
 
 ### Frontend
-Para startar a aplicação frontend é so rodar o comando
+Para startar a aplicação frontend é necessário preencher a variavel de ambiente:
+
 ```
+VITE_PORT=
+```
+
+E depois rodar o projeto: 
+```
+cd frontend
 npm run dev
 ```
 Qualquer duvida só me chamar pelo linkedin
