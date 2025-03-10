@@ -16,6 +16,7 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: 'Registrar usuário' })
   @ApiResponse({ status: 200, description: 'Usuário registrado' })
+  @ApiResponse({ status: 409, description: 'Usuário já existente.' })
   async register(@Body() body: RegisterUserBody) {
     const { name, email, password } = body;
 

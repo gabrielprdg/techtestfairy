@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { Task } from '../entities/task';
 import { TaskRepository } from '../protocols/db/task/task-repository';
 import { UserRepository } from '../protocols/db/login/user-repository';
+import { TaskDoesNotExists } from './errors/task-does-not-exists';
 
 interface TaskUpdateDataRequest {
   id: string
@@ -20,7 +21,7 @@ export class UpdateTask {
 
     const taskFounded = await this.taskRepository.findById(id);
     if (!taskFounded) {
-      throw new ConflictException('Task does not exist');
+      throw new TaskDoesNotExists();
     }
 
     taskFounded.title = title;

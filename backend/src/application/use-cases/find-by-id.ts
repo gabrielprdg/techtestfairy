@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Task } from '../entities/task';
 import { TaskRepository } from '../protocols/db/task/task-repository';
+import { TaskDoesNotExists } from './errors/task-does-not-exists';
 
 type FindByIdResponse = {
   task: Task
@@ -15,7 +16,7 @@ export class FindById {
     const task = await this.taskRepository.findById(id);
 
     if (!task) {
-      throw new ConflictException('task with this id does not exists');
+      throw new TaskDoesNotExists();
     }
     return { task }
   }

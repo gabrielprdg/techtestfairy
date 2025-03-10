@@ -2,6 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';// Serviço de ha
 import { UserRepository } from '../protocols/db/login/user-repository';
 import { User } from '../entities/account';
 import { HashService } from 'src/infra/services/hash.service';
+import { UserAlreadyExists } from './errors/user-already-exists';
 
 interface RegisterUserDataRequest {
   name: string
@@ -25,7 +26,7 @@ export class RegisterUser {
 
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
-      throw new ConflictException('User with this email already exists');
+      throw new UserAlreadyExists();
     }
     const hashedPassword = await this.hashService.hash(password);
 
